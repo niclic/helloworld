@@ -6,9 +6,15 @@ import (
 	"github.com/niclic/helloworld/internal/handlers"
 )
 
+func init() {
+	router.RegisterRoutes(Routes)
+}
+
 var mux = http.NewServeMux()
 
-var DefaultRouter = &HttpRouter{ServeMux: mux}
+var router = &HttpRouter{ServeMux: mux}
+
+var DefaultRouter = router
 
 type HttpRouter struct {
 	*http.ServeMux

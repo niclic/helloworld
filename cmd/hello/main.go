@@ -6,8 +6,6 @@ import (
 )
 
 func main() {
-	routing.DefaultRouter.RegisterRoutes(routing.Routes)
-
 	server := server.HttpServer{8080, routing.DefaultRouter}
 	server.Start()
 }
