@@ -6,19 +6,26 @@ import (
 	"net/http"
 )
 
-func createHttpRouter() *http.ServeMux {
-	return http.NewServeMux()
+var mux = http.NewServeMux()
+
+type httpRouter struct {
+	*http.ServeMux
 }
 
-func registerRoutes(routes map[string]httpHandler, router *http.ServeMux) {
-	for r, h := range routes {
-		router.HandleFunc(r, h)
+func (r *httpRouter) RegisterRoutes(routes map[string]httpHandler) {
+	for p, h := range routes {
+		r.HandleFunc(p, h)
 	}
 }
 
-func startServer(port int, router *http.ServeMux) {
-	log.Printf("Listening on port %d...\n", port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), router))
+type httpServer struct {
+	port   int
+	router *httpRouter
+}
+
+func (s *httpServer) Start() {
+	log.Printf("Listening on port %d...\n", s.port)
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", s.port), s.router))
 }
 
 type httpHandler func(w http.ResponseWriter, r *http.Request)
@@ -28,13 +35,13 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	port := 8080
-
 	routes := map[string]httpHandler{
-		"/": helloHandler,
+		"/hello": helloHandler,
 	}
 
-	router := createHttpRouter()
-	registerRoutes(routes, router)
-	startServer(port, router)
+	router := &httpRouter{ServeMux: mux}
+	router.RegisterRoutes(routes)
+
+	server := &httpServer{8080, router}
+	server.Start()
 }
