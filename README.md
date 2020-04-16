@@ -10,3 +10,10 @@ cd /tmp
 ./hello
 
 ```
+
+
+## Test
+
+```sh
+go test -v ./...
+```
