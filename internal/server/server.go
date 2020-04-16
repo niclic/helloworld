@@ -19,9 +19,10 @@ func (s *HttpServer) SetRouter(r *routing.HttpRouter) {
 
 func (s *HttpServer) Start() {
 	if s.router == nil {
-		s.router = routing.DefaultRouter
+		s.router = routing.NewHttpRouter()
+		s.router.RegisterRoutes(routing.Routes)
 	}
 
 	log.Printf("Listening on port %d...\n", s.Port)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", s.Port), s.router))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", s.Port), s.router.Mux()))
 }
