@@ -8,18 +8,21 @@ import (
 	"github.com/niclic/helloworld/internal/routing"
 )
 
-type HttpServer struct {
+// HTTPServer represents a basic HTTP Web Server.
+type HTTPServer struct {
 	Port   int
-	router *routing.HttpRouter
+	router *routing.HTTPRouter
 }
 
-func (s *HttpServer) SetRouter(r *routing.HttpRouter) {
+// SetRouter sets the HTTPRouter for this HTTPServer instance.
+func (s *HTTPServer) SetRouter(r *routing.HTTPRouter) {
 	s.router = r
 }
 
-func (s *HttpServer) Start() {
+// Start starts the HTTPServer on the specified localhost port.
+func (s *HTTPServer) Start() {
 	if s.router == nil {
-		s.router = routing.NewHttpRouter()
+		s.router = routing.NewHTTPRouter()
 		s.router.RegisterRoutes(routing.Routes)
 	}
 
